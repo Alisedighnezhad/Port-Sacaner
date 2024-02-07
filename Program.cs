@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 namespace Port_scaner
 {
@@ -10,33 +7,53 @@ namespace Port_scaner
         static async Task Main(string[] args)
         {
             Console.Write("Enter the target IP address: ");
-            string target = Console.ReadLine();
+            string target;
+            while (true)
+            {
+                target = Console.ReadLine();
+                if (target != string.Empty)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("ip addr cannot be null \n try again ");
+                }
+            }
             Console.WriteLine("ok now time for chose mode \n type tcp or udp");
-            if (Console.ReadLine() == "tcp")
+            while (true)
             {
-                Console.WriteLine("ok lets start on tcp...");
-                await start(target, "tcp");
-                Console.WriteLine("Enjoy it \n thanks for choosing me for helping you \n I hope you are always as reliable as TCP :)");
-            }
-            else if (Console.ReadLine() == "udp")
-            {
-                Console.WriteLine("ok lets start on udp...");
-                await start(target, "udp");
-                Console.WriteLine("Enjoy it \n thanks for choosing me for helping you \nI hope you are always as fast as UDP :)");
-            }
-            else 
-            {
-                Console.WriteLine("");
+                string protocol = Console.ReadLine();
+                if (protocol == "tcp")
+                {
+                    Console.WriteLine("ok lets start on tcp...");
+                    await start(target, "tcp");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Enjoy it \n thanks for choosing me for helping you \n I hope you are always as reliable as TCP :)");
+                    break;
+                }
+                else if (protocol == "udp")
+                {
+                    Console.WriteLine("ok lets start on udp...");
+                    await start(target, "udp");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Enjoy it \n thanks for choosing me for helping you \nI hope you are always as fast as UDP :)");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("pls type tcp or udp");
+                }
             }
         }
 
-        static async Task start(string ip , string mode )
+        static async Task start(string ip, string mode)
         {
             Console.WriteLine($"scaning For {ip} ports is start");
             if (mode == "tcp")
             {
                 for (int port = 0; port <= 65535; port++)
-                    await tcp(ip ,port);
+                    await tcp(ip, port);
             }
             else
             {
@@ -45,7 +62,7 @@ namespace Port_scaner
             }
         }
 
-        static async Task tcp(string ip , int port)
+        static async Task tcp(string ip, int port)
         {
             using (TcpClient tcp = new TcpClient())
             {
